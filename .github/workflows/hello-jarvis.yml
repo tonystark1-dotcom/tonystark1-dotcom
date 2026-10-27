@@ -1,1 +1,40 @@
+name: 🤖 Trợ lý J.A.R.V.I.S của Tony Stark
 
+# 1. KHI NÀO CHẠY? (Triggers)
+on:
+  push: # Tự động chạy mỗi khi bạn lưu file mới vào nhánh main
+    branches: [ "main" ]
+  workflow_dispatch: # Cho phép bạn bấm nút chạy thử bằng tay bất cứ lúc nào!
+
+# 2. CÁC CÔNG VIỆC SẼ LÀM (Jobs)
+jobs:
+  greet-tony:
+    name: Khởi động hệ thống Python
+    runs-on: ubuntu-latest # Mượn 1 máy chủ Linux miễn phí của GitHub
+
+    steps:
+      # Bước 1: Kéo code từ Repo của bạn về máy chủ ảo
+      - name: 📥 Tải mã nguồn dự án
+        uses: actions/checkout@v4
+
+      # Bước 2: Cài đặt sẵn Python 3.12
+      - name: 🐍 Cài đặt Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      # Bước 3: Chạy thử một đoạn code Python tự động và tạo bảng báo cáo đẹp mắt
+      - name: ⚡ Chạy kịch bản kiểm tra hệ thống
+        run: |
+          python -c "
+          import datetime, platform
+          now = datetime.datetime.now(datetime.timezone(datetime.timedelta(hours=7)))
+          time_str = now.strftime('%H:%M:%S ngày %d/%m/%Y')
+          print(f'Xin chào ngài Tony Stark (tonystark1-dotcom)!')
+          print(f'Hệ thống đang chạy trên Python {platform.python_version()}')
+          print(f'Thời gian kích hoạt (Giờ VN): {time_str}')
+          "
+          echo "### 🚀 Báo cáo từ J.A.R.V.I.S" >> $GITHUB_STEP_SUMMARY
+          echo "- **Tài khoản sở hữu:** \`${{ github.actor }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "- **Kho lưu trữ (Repo):** \`${{ github.repository }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "- **Trạng thái hệ thống:** 🟢 Hoạt động hoàn hảo!" >> $GITHUB_STEP_SUMMARY
